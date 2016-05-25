@@ -40,6 +40,7 @@ void mkEinsM (double A[], int n){
   mkNULLM(A,n);
   for (int i=0; i<n; i++) A[i*n+i]=1;
 }
+
 // Erzeugen der Einsmatrix
 void mkEinsM (double A[], int n){
   mkNULLM(A,n);
@@ -93,7 +94,7 @@ int ChckDiagM (double A[], int n){
   return ret;
 }
 
-
+// 
 //
 // Programmstart:
 // **************
