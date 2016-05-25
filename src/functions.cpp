@@ -1,18 +1,20 @@
-/** ****************************************************************************
-  * *  Name:    createM
-  * *  Autor:   Gregor Danler
-  * *  Datum:   25.05.2015
-  * *  Version: 1
-  * ****************************************************************************
+/******************************************************************************
+  *  Name:    createM
+  *  Autor:   Gregor Danler
+  *  Datum:   25.05.2015
+  *  Version: 1
+  *****************************************************************************
   *
   * Kurzbeschreibung:
   * *****************
   *
   * Matrixoperationen für (n x n)- Matrizen
+  * 
   * Konventionen: 
   *  - Zeilenindex i  mit i = 0,1, ... n-1
   *  - Spaltenindex j mit j = 0,1, ... n-1
   *  - A_ij :=A[i*n +j]
+  * 
 **/
 
 /// Includefiles:
@@ -28,11 +30,13 @@ using namespace std;
 
 // Dimension der Matrix
 int dimof(double A[]){
-  return (sizeof(A)/sizeof(A[0])); 
+  int ret = sqrt(sizeor(A)/sieof(A[0]));
+  return ret;
 }
+
 // Erzeugen der Nullmatrix
 void mkNULLM (double A[]){
- int n = dimof(A); 
+  int n = dimof(A); 
   int k;
   for (int i=0; i<n; i++){
     k=i*n;
@@ -50,7 +54,8 @@ void mkEinsM (double A[]){
 }
 
 //Erzeugen einer Zufallsmatrix
-void mkRandM (double A[], int n){
+void mkRandM (double A[]){
+  int n = dimof(A);
   srand (time(NULL));
   int k;
   for (int i=0; i<n; i++){
@@ -60,7 +65,8 @@ void mkRandM (double A[], int n){
 }
 
 // Ausgabe einer Matrix
-void printM (char X, double A[], int n){
+void printM (char X, double A[]){
+  int n = dimof(A);
   cout << X << "= " << endl;
     for(int i=0; i<n; i++){
       int k =i*n;
@@ -72,7 +78,8 @@ void printM (char X, double A[], int n){
 }
 
 // Betragssumme einer Matrixzeile i = 0, ... , n-1
-double SumAbsRowM (double A[], int n, int i){
+double SumAbsRowM (double A[], int i){
+ int n = dimof(A);
  double ret=0;
  int k=i*n;
  for (int j=0;j<n;j++) ret += abs(A[k+j]);
@@ -80,13 +87,14 @@ double SumAbsRowM (double A[], int n, int i){
 }
 
 // Vergleich des Betrag eines Diagonalelement mit dem Zeilensummenbetrag
-int ChckDiagM (double A[], int n){
+int ChckDiagM (double A[]){
+  int n = dimof(A);
   int ret=0;
   double delm;
   for(int i=1; i<n ; i++){
     int k=i*n;
     delm = abs(A[k+i]);
-    if (delm  > (SumAbsRowM(A, n, i) - delm )){
+    if (delm  > (SumAbsRowM(A, i) - delm )){
       ret=1;
     } else {
       ret=0;
@@ -104,7 +112,7 @@ int main(int argc, char *argv[]) {
   int n=100;
   int l=n*n;
   double A[l], B[l], C[l];
-  mkNULLM (A,n);
-  mkEinsM (B,n);
+  mkNULLM (A);
+  mkEinsM (B);
   cout << ChckDiagM(B,n) << endl;
 }
