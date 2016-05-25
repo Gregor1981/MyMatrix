@@ -1,31 +1,38 @@
-// ****************************************************************************
-// *  Name:    createM
-// *  Autor:   Gregor Danler
-// *  Datum:   20.05.2015
-// *  Version: 1
-// ****************************************************************************
-//
-// Kurzbeschreibung:
-// *****************
-//
-// Matrixoperationen:
-//
-//   - mkNULL( <int>): Erzeugt eine (n x n)- Nullmatrix
-// Includefiles:
-// *************
-//
+/** ****************************************************************************
+  * *  Name:    createM
+  * *  Autor:   Gregor Danler
+  * *  Datum:   25.05.2015
+  * *  Version: 1
+  * ****************************************************************************
+  *
+  * Kurzbeschreibung:
+  * *****************
+  *
+  * Matrixoperationen für (n x n)- Matrizen
+  * Konventionen: 
+  *  - Zeilenindex i  mit i = 0,1, ... n-1
+  *  - Spaltenindex j mit j = 0,1, ... n-1
+  *  - A_ij :=A[i*n +j]
+**/
+
+/// Includefiles:
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <cmath>
- using namespace std;
+
+using namespace std;
 
 // Unterprogramme:
 // ***************
 
-
+// Dimension der Matrix
+int dimof(double A[]){
+  return (sizeof(A)/sizeof(A[0])); 
+}
 // Erzeugen der Nullmatrix
-void mkNULLM (double A[], int n){
+void mkNULLM (double A[]){
+ int n = dimof(A); 
   int k;
   for (int i=0; i<n; i++){
     k=i*n;
@@ -36,14 +43,9 @@ void mkNULLM (double A[], int n){
 }
 
 // Erzeugen der Einsmatrix
-void mkEinsM (double A[], int n){
-  mkNULLM(A,n);
-  for (int i=0; i<n; i++) A[i*n+i]=1;
-}
-
-// Erzeugen der Einsmatrix
-void mkEinsM (double A[], int n){
-  mkNULLM(A,n);
+void mkEinsM (double A[]){
+  int n = dimof(A);
+  mkNULLM(A);
   for (int i=0; i<n; i++) A[i*n+i]=1;
 }
 
