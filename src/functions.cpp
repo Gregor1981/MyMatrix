@@ -28,15 +28,10 @@ using namespace std;
 // Unterprogramme:
 // ***************
 
-// Dimension der Matrix
-int dimof(double A[]){
-  int ret = sqrt(sizeor(A)/sieof(A[0]));
-  return ret;
-}
+
 
 // Erzeugen der Nullmatrix
-void mkNULLM (double A[]){
-  int n = dimof(A); 
+void mkNULLM (double A[], int n){
   int k;
   for (int i=0; i<n; i++){
     k=i*n;
@@ -47,15 +42,13 @@ void mkNULLM (double A[]){
 }
 
 // Erzeugen der Einsmatrix
-void mkEinsM (double A[]){
-  int n = dimof(A);
-  mkNULLM(A);
+void mkEinsM (double A[], int n){
+  mkNULLM(A, n);
   for (int i=0; i<n; i++) A[i*n+i]=1;
 }
 
 //Erzeugen einer Zufallsmatrix
-void mkRandM (double A[]){
-  int n = dimof(A);
+void mkRandM (double A[], int n){
   srand (time(NULL));
   int k;
   for (int i=0; i<n; i++){
@@ -65,8 +58,7 @@ void mkRandM (double A[]){
 }
 
 // Ausgabe einer Matrix
-void printM (char X, double A[]){
-  int n = dimof(A);
+void printM (char X, double A[], n){
   cout << X << "= " << endl;
     for(int i=0; i<n; i++){
       int k =i*n;
@@ -78,8 +70,7 @@ void printM (char X, double A[]){
 }
 
 // Betragssumme einer Matrixzeile i = 0, ... , n-1
-double SumAbsRowM (double A[], int i){
- int n = dimof(A);
+double SumAbsRowM (double A[], int n, int i){
  double ret=0;
  int k=i*n;
  for (int j=0;j<n;j++) ret += abs(A[k+j]);
@@ -87,14 +78,13 @@ double SumAbsRowM (double A[], int i){
 }
 
 // Vergleich des Betrag eines Diagonalelement mit dem Zeilensummenbetrag
-int ChckDiagM (double A[]){
-  int n = dimof(A);
+int ChckDiagM (double A[], int n){
   int ret=0;
   double delm;
   for(int i=1; i<n ; i++){
     int k=i*n;
     delm = abs(A[k+i]);
-    if (delm  > (SumAbsRowM(A, i) - delm )){
+    if (delm  > (SumAbsRowM(A, n, i) - delm )){
       ret=1;
     } else {
       ret=0;
@@ -111,7 +101,7 @@ int ChckDiagM (double A[]){
 int main(int argc, char *argv[]) {
   int n=100;
   int l=n*n;
-  double A[l], B[l], C[l];
+  double A[l], B[l];
   mkNULLM (A);
   mkEinsM (B);
   cout << ChckDiagM(B,n) << endl;
