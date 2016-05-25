@@ -28,8 +28,6 @@ using namespace std;
 // Unterprogramme:
 // ***************
 
-
-
 // Erzeugen der Nullmatrix
 void mkNULLM (double A[], int n){
   int k;
