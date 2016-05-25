@@ -58,7 +58,7 @@ void mkRandM (double A[], int n){
 }
 
 // Ausgabe einer Matrix
-void printM (char X, double A[], n){
+void printM (char X, double A[], int n){
   cout << X << "= " << endl;
     for(int i=0; i<n; i++){
       int k =i*n;
@@ -102,7 +102,8 @@ int main(int argc, char *argv[]) {
   int n=100;
   int l=n*n;
   double A[l], B[l];
-  mkNULLM (A);
-  mkEinsM (B);
-  cout << ChckDiagM(B,n) << endl;
+  mkNULLM (A, n);
+  mkEinsM (B, n);
+  cout << "Nullmatrix: " << ChckDiagM(A,n) << endl
+       << "Einsmatrix: " << ChckDiagM(B,n) << endl;
 }
