@@ -96,7 +96,7 @@ void printM (char X, double A[], int n){
 double SumAbsRowM (double A[], int n, int i){
  double ret=0;
  int k=i*n;
- for (int j=0;j<n;j++) ret += abs(A[k+j]);
+ for (int j=0;j<n;j++) ret += MyABS(A[k+j]);
  return ret;
 }
 
@@ -107,7 +107,7 @@ int ChckDiagM (double A[], int n){
   double delm;
   for(int i=1; i<n ; i++){
     int k=i*n;
-    delm = abs(A[k+i]);
+    delm = MyABS(A[k+i]);
     if (delm  >= (SumAbsRowM(A, n, i) - delm )){
       ret=1;
     } else {
@@ -133,14 +133,27 @@ void ChangeRow (double A[], int n, int r1, int r2){
 // Pivotmaximierungssuche
 int ChckMaxPivot (double A[], int n){
 	int ret=0;
-	double piv=abs(A[0]);
+	double piv=MyABS(A[0]);
 	for (int i=1; i<n; i++){
 		if(piv < A[n*i]) ret=1;
 		//piv < A[n+i] ? ret=1;
 	}
 	return ret;
 }
+
 // SetMaxPivot
+void SetMaxPivot(double A[], int n){
+	int indPind=0;
+	int maxPind=0;
+	
+	double indPval=MyABS(A[0]);
+
+	for (int i=1; i<n; i++){
+		if (MyABS(A[n*i]) > indPval) maxPind = i;
+	}
+	if (indPind != maxPind) ChangeRow(A, n, indPind, maxPind);
+}
+
 
 
 //
@@ -152,10 +165,11 @@ int main(int argc, char *argv[]) {
   double A[l], B[l];
   mkNULLM (A, n);
   mkSteigM (B, n);
-	cout << SetMaxPivot(B, n) << endl;
+	cout << MyABS(-3.1) << endl;
+	SetMaxPivot(B,n);
+	
 	ChangeRow(B, n, 0, 4);
-	cout << SetMaxPivot(B, n) << endl;
+	cout << ChckMaxPivot(B, n) << endl;
 	printM('B', B, n);
   return 0;
 }
-
