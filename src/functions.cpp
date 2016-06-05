@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cmath>
+#include <iomanip> //std::setprecision
 
 using namespace std;
 
@@ -33,12 +34,12 @@ using namespace std;
 //  return sqrt(sizeof(A)/sizeof(A[0]));
 //}
 
-// Absolutbetrag 
+// Absolutbetrag
 double MyABS(double v){
-	if (v>=0) 
-		return v;
-	else
-		return -v;
+        if (v>=0)
+                return v;
+        else
+                return -v;
 }
 
 
@@ -60,12 +61,12 @@ void mkEinsM (double A[],int n){
 
 // Erzeugen einer Matrix mit fortlaufend steigenden Wert
 void mkSteigM (double A[], int n){
-	int k;
-	int eintrag=1;
+        int k;
+        int eintrag=1;
   for (int i=0; i<n; i++){ k=i*n;
     for (int j=0; j<n; j++){
       A[k+j]=eintrag;
-			eintrag++;
+                        eintrag++;
     }
   }
 }
@@ -86,7 +87,7 @@ void printM (char X, double A[], int n){
   for(int i=0; i<n; i++){
     int k =i*n;
     for(int j=0; j<n; j++){
-       cout << "\t" << A[k+j];
+       cout << "\t" << setprecision(4) << A[k+j];
     }
     cout << endl;
   }
@@ -99,7 +100,6 @@ double SumAbsRowM (double A[], int n, int i){
  for (int j=0;j<n;j++) ret += MyABS(A[k+j]);
  return ret;
 }
-
 
 // Auf schwache diagonale Dominanz kontrollieren
 int ChckDiagM (double A[], int n){
@@ -120,42 +120,70 @@ int ChckDiagM (double A[], int n){
 
 // Zeilentausch: r1 mit r2
 void ChangeRow (double A[], int n, int r1, int r2){
-	double Z;
-	int k = r1*n;
-	int l = r2*n;
-	for (int j=0; j<n ; j++) {
-		Z=A[k+j];
-		A[k+j]=A[l+j];
-		A[l+j]=Z;
-	}	
+        double Z;
+        int k = r1*n;
+        int l = r2*n;
+        for (int j=0; j<n ; j++) {
+                Z=A[k+j];
+                A[k+j]=A[l+j];
+                A[l+j]=Z;
+        }
 }
 
 // Pivotmaximierungssuche
 int ChckMaxPivot (double A[], int n){
-	int ret=0;
-	double piv=MyABS(A[0]);
-	for (int i=1; i<n; i++){
-		if(piv < A[n*i]) ret=1;
-		//piv < A[n+i] ? ret=1;
-	}
-	return ret;
+        int ret=0;
+        double piv=MyABS(A[0]);
+        for (int i=1; i<n; i++){
+                if(piv < A[n*i]) ret=1;
+                //piv < A[n+i] ? ret=1;
+        }
+        return ret;
 }
 
-// SetMaxPivot
-void SetMaxPivot(double A[], int n){
-	int indPind=0;
+// Pivotelement mit maximalen Eintrag erzeugen
+// Liefert Wert 1 bei Zeilentausch sonst 0 (Wichtig für Determinante)
+int SetMaxPivot(double A[], int n, int ps){
+	int indPind=ps;
 	int maxPind=0;
-	
-	double indPval=MyABS(A[0]);
+	double indPval=MyABS(A[ps*n+ps]);
 
-	for (int i=1; i<n; i++){
-		if (MyABS(A[n*i]) > indPval) maxPind = i;
+    for (int i=ps+1; i<n; i++){
+		if (MyABS(A[n*i+ps]) > indPval)
+		{ 
+			maxPind = i;
+			indPval = MyABS(A[n*i+ps]);
+		}
 	}
-	if (indPind != maxPind) ChangeRow(A, n, indPind, maxPind);
+    if (indPind != maxPind){
+		ChangeRow(A, n, indPind, maxPind);
+		return 1;
+	}
+	return 0;		
 }
 
+// Pivotschritt
+void PivotSet(double A[], int n, int ps){
+	double l_ips;
+	int k;
+	for(int i=ps+1; i<n; i++){
+		k    = i*n;
+		l_ips = A[k+ps]/A[n*ps+ps];
+		A[k+ps]=l_ips;
+		for(int j=ps+1; j<n; j++){
+			A[k+j] = A[k+j] - l_ips*A[n*ps+j];
+		}
+		A[k+ps]=l_ips;
+	}
+}
 
-
+//Algorithmus
+void Gauss(double A[], int n){
+	for(int l=0; l<n; l++){
+		SetMaxPivot(A,n,l);
+		PivotSet(A,n,l);
+	}
+}
 //
 // Programmstart:
 // **************
@@ -165,11 +193,14 @@ int main(int argc, char *argv[]) {
   double A[l], B[l];
   mkNULLM (A, n);
   mkSteigM (B, n);
-	cout << MyABS(-3.1) << endl;
-	SetMaxPivot(B,n);
-	
-	ChangeRow(B, n, 0, 4);
-	cout << ChckMaxPivot(B, n) << endl;
-	printM('B', B, n);
+  printM('B', B , n);
+  B[3*n+1]=50;
+  Gauss(B, n);
+  printM('B', B , n);
+//  PivotSet(B, n, 0);
+//  printM('B', B , n);
+//        ChangeRow(B, n, 0, 4);
+//        cout << ChckMaxPivot(B, n) << endl;
+//        printM('B', B, n);
   return 0;
 }
